@@ -19,6 +19,7 @@ MODELS = [
     "google/gemma-4-31b-it:free",
     "openai/gpt-oss-20b:free",
     "openai/gpt-oss-120b:free",
+    "mistralai/mistral-nemo:free",
 ]
 
 # Input and output price in USD per 1 million tokens
@@ -26,6 +27,7 @@ PRICES = {
     "google/gemma-4-31b-it:free":                  (0.0, 0.0),
     "openai/gpt-oss-20b:free":                     (0.0, 0.0),
     "openai/gpt-oss-120b:free":                    (0.0, 0.0),
+    "mistralai/mistral-nemo:free":                 (0.0, 0.0),
 }
 
 QUESTION = "What is the most important skill for a software engineer in 2025?"

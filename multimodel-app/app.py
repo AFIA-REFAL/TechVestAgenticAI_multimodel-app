@@ -7,11 +7,12 @@ ALL_MODELS = [
     "google/gemma-4-31b-it:free",
     "openai/gpt-oss-20b:free",
     "openai/gpt-oss-120b:free",
+    "mistralai/mistral-nemo:free",
 ]
 
-MODEL_LABELS   = {"google/gemma-4-31b-it:free":"Gemma 4 31B","openai/gpt-oss-20b:free":"GPT-OSS 20B","openai/gpt-oss-120b:free":"GPT-OSS 120B"}
-MODEL_PROVIDER = {"google/gemma-4-31b-it:free":"Google","openai/gpt-oss-20b:free":"OpenAI OSS","openai/gpt-oss-120b:free":"OpenAI OSS"}
-MODEL_ICON     = {"google/gemma-4-31b-it:free":"🟣","openai/gpt-oss-20b:free":"🟢","openai/gpt-oss-120b:free":"🔵"}
+MODEL_LABELS   = {"google/gemma-4-31b-it:free":"Gemma 4 31B","openai/gpt-oss-20b:free":"GPT-OSS 20B","openai/gpt-oss-120b:free":"GPT-OSS 120B","mistralai/mistral-nemo:free":"Mistral Nemo"}
+MODEL_PROVIDER = {"google/gemma-4-31b-it:free":"Google","openai/gpt-oss-20b:free":"OpenAI OSS","openai/gpt-oss-120b:free":"OpenAI OSS","mistralai/mistral-nemo:free":"Mistral"}
+MODEL_ICON     = {"google/gemma-4-31b-it:free":"🟣","openai/gpt-oss-20b:free":"🟢","openai/gpt-oss-120b:free":"🔵","mistralai/mistral-nemo:free":"🟠"}
 
 st.markdown("""<style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
