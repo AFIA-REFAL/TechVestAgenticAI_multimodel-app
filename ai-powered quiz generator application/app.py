@@ -34,21 +34,20 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 /* ── RESET & BASE ── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; }
 
 html, body {
     font-family: 'Inter', sans-serif;
     background: #080c14;
     color: #f1f5f9;
-    height: 100%;
-    overflow: hidden;
+    min-height: 100vh;
+    overflow: auto;
 }
 
 [data-testid="stAppViewContainer"] {
     background: #080c14;
     font-family: 'Inter', sans-serif;
-    overflow: hidden;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 [data-testid="stHeader"]  { display: none !important; }
@@ -57,32 +56,39 @@ html, body {
 
 [data-testid="stMain"] {
     padding: 0 !important;
-    overflow: hidden;
-    height: 100vh;
+    min-height: 100vh;
 }
 [data-testid="stMain"] > div {
     padding: 0 !important;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
 }
 [data-testid="block-container"] {
     padding: 0 !important;
     max-width: 100% !important;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+}
+
+/* let Streamlit columns breathe — never clip */
+[data-testid="column"],
+[data-testid="stVerticalBlock"],
+[data-testid="stVerticalBlockBorderWrapper"],
+[data-testid="stHorizontalBlock"] {
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
 }
 
 /* ── LAYOUT SHELL ── */
 .shell {
     display: flex;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
     background: #080c14;
 }
 
 /* ── LEFT NAV DOCK ── */
 .nav-dock {
     width: 72px;
+    min-height: 100vh;
     background: rgba(255,255,255,0.03);
     border-right: 1px solid rgba(255,255,255,0.06);
     display: flex;
@@ -92,6 +98,8 @@ html, body {
     gap: 8px;
     flex-shrink: 0;
     backdrop-filter: blur(20px);
+    position: sticky;
+    top: 0;
 }
 .nav-logo {
     width: 40px; height: 40px;
@@ -126,7 +134,7 @@ html, body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    min-height: 100vh;
 }
 
 /* ── TOP HEADER ── */
@@ -186,10 +194,9 @@ html, body {
 .content-area {
     flex: 1;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    overflow: hidden;
-    padding: 28px 36px;
+    padding: 24px 36px 40px;
 }
 
 /* ── GLASS PANEL ── */
@@ -201,13 +208,13 @@ html, body {
     border-radius: 24px;
     width: 100%;
     max-width: 660px;
-    padding: 40px 44px;
+    padding: 32px 40px;
     box-shadow:
         0 0 0 1px rgba(255,255,255,0.04) inset,
         0 24px 64px rgba(0,0,0,0.5),
         0 4px 16px rgba(0,0,0,0.3);
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 .glass-panel::before {
     content: '';
@@ -218,7 +225,7 @@ html, body {
 }
 
 /* ── SCREEN HEADING ── */
-.screen-head { margin-bottom: 30px; }
+.screen-head { margin-bottom: 20px; }
 .screen-head .eyebrow {
     font-size: 10px; font-weight: 700; letter-spacing: .14em;
     text-transform: uppercase;
@@ -259,7 +266,7 @@ html, body {
 
 .upload-zone {
     border-radius: 18px;
-    padding: 44px 28px;
+    padding: 30px 28px;
     text-align: center;
     cursor: pointer;
     position: relative;
@@ -530,37 +537,128 @@ div[data-testid="stSlider"] p { color: rgba(255,255,255,.35) !important; }
 [data-testid="stSlider"] [role="slider"] { background: #6366f1 !important; box-shadow: 0 0 0 4px rgba(99,102,241,.25) !important; }
 [data-testid="stSlider"] [data-baseweb="slider"] [role="progressbar"] { background: linear-gradient(90deg,#6366f1,#8b5cf6) !important; }
 
+/* ── ALL BUTTONS BASE ── */
 .stButton > button {
-    border-radius: 12px !important; font-weight: 700 !important;
-    font-size: 14px !important; padding: 13px 20px !important;
-    transition: all .2s !important; width: 100% !important;
+    border-radius: 12px !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    padding: 13px 20px !important;
+    transition: all .2s !important;
+    width: 100% !important;
     font-family: 'Inter', sans-serif !important;
+    text-align: left !important;
 }
+
+/* ── PRIMARY (action buttons + selected options) ── */
 .stButton > button[kind="primary"] {
     background: linear-gradient(135deg,#6366f1,#8b5cf6) !important;
-    color: #fff !important; border: none !important;
+    color: #fff !important;
+    border: none !important;
     box-shadow: 0 4px 20px rgba(99,102,241,0.45) !important;
 }
 .stButton > button[kind="primary"]:hover {
     box-shadow: 0 6px 30px rgba(99,102,241,0.65) !important;
     transform: translateY(-2px) !important;
 }
+
+/* ── SECONDARY (unselected options + nav buttons) ── */
 .stButton > button[kind="secondary"] {
-    background: rgba(255,255,255,0.04) !important;
-    border: 1.5px solid rgba(255,255,255,0.1) !important;
-    color: rgba(255,255,255,.65) !important;
+    background: rgba(255,255,255,0.03) !important;
+    border: 1.5px solid rgba(255,255,255,0.09) !important;
+    color: rgba(255,255,255,.7) !important;
 }
 .stButton > button[kind="secondary"]:hover {
-    background: rgba(99,102,241,0.1) !important;
-    border-color: rgba(99,102,241,0.4) !important;
-    color: #a5b4fc !important;
+    background: rgba(99,102,241,0.09) !important;
+    border-color: rgba(99,102,241,0.45) !important;
+    color: #c7d2fe !important;
+    transform: translateY(-1px) !important;
 }
+
 .stButton > button:disabled { opacity: .3 !important; transform: none !important; box-shadow: none !important; }
+
+/* ── NAV buttons (Back / Next) — centred text ── */
+.stButton > button[data-testid*="Back"],
+.stButton > button[data-testid*="Next"],
+.stButton > button[data-testid*="Submit"],
+.stButton > button[data-testid*="Retake"],
+.stButton > button[data-testid*="Upload"] {
+    text-align: center !important;
+}
 
 [data-testid="stSpinner"] > div { border-top-color: #6366f1 !important; }
 .stCaption, [data-testid="stCaptionContainer"] p { color: rgba(255,255,255,.28) !important; font-size: 11px !important; }
 [data-testid="stAlert"] { border-radius: 12px !important; }
 .element-container { margin: 0 !important; }
+
+/* ── NAV DOCK BUTTONS ── */
+div[data-testid="stVerticalBlock"] > div[data-testid="stVerticalBlockBorderWrapper"] > div > div > div.stButton > button,
+section[data-testid="stSidebar"] .stButton > button {
+    width: 44px !important; height: 44px !important;
+    min-height: 44px !important;
+    padding: 0 !important;
+    border-radius: 12px !important;
+    font-size: 20px !important;
+    display: flex !important; align-items: center !important; justify-content: center !important;
+    text-align: center !important;
+    margin: 2px auto !important;
+}
+
+/* nav column specific overrides */
+.nav-btn-col .stButton > button {
+    width: 44px !important; height: 44px !important;
+    min-height: 44px !important;
+    padding: 0 !important;
+    border-radius: 12px !important;
+    font-size: 20px !important;
+    text-align: center !important;
+    line-height: 1 !important;
+    margin: 0 auto !important;
+}
+.nav-btn-col .stButton > button[kind="primary"] {
+    background: rgba(99,102,241,0.2) !important;
+    border: 1px solid rgba(99,102,241,0.4) !important;
+    color: #a5b4fc !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+.nav-btn-col .stButton > button[kind="secondary"] {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    color: rgba(255,255,255,0.3) !important;
+}
+.nav-btn-col .stButton > button[kind="secondary"]:hover {
+    background: rgba(255,255,255,0.07) !important;
+    border-color: rgba(255,255,255,0.1) !important;
+    color: rgba(255,255,255,0.8) !important;
+    transform: none !important;
+}
+.nav-btn-col [data-testid="stVerticalBlock"] { gap: 4px !important; }
+
+/* info/stat cards for analytics/history/settings pages */
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+.info-card {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px; padding: 20px 18px;
+}
+.info-card .ic-label { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.3); margin-bottom: 8px; }
+.info-card .ic-val   { font-size: 28px; font-weight: 800; color: #f1f5f9; }
+.info-card .ic-sub   { font-size: 12px; color: rgba(255,255,255,.3); margin-top: 3px; }
+.hist-row {
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px; padding: 14px 18px; margin-bottom: 8px;
+}
+.hist-row .hr-title { font-size: 13px; font-weight: 600; color: #f1f5f9; }
+.hist-row .hr-sub   { font-size: 11px; color: rgba(255,255,255,.35); margin-top: 2px; }
+.hist-score { font-size: 18px; font-weight: 800; color: #a5b4fc; }
+.setting-row {
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px; padding: 16px 20px; margin-bottom: 8px;
+}
+.setting-row .sr-label { font-size: 13px; font-weight: 600; color: #f1f5f9; }
+.setting-row .sr-sub   { font-size: 11px; color: rgba(255,255,255,.35); margin-top: 2px; }
+.setting-row .sr-val   { font-size: 12px; font-weight: 700; color: #818cf8; background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.25); padding: 4px 12px; border-radius: 8px; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -570,7 +668,8 @@ def init():
         "step":"upload","slides":[],"filename":"","slide_count":0,"word_count":0,
         "num_questions":10,"difficulty":"Medium","questions":[],"user_answers":{},
         "current_q":0,"start_time":None,"elapsed":0,"explanations":{},"rk":0,
-        "processing":False,"proc_stage":0,
+        "processing":False,"proc_stage":0,"nav_page":"home",
+        "quiz_history":[],
     }.items():
         if k not in st.session_state: st.session_state[k] = v
 init()
@@ -603,49 +702,48 @@ def gen_exp(questions, answers):
     raw = llm(f"1-2 sentences per wrong answer: why wrong + why correct is right.\n{block}\nReturn ONLY JSON: {{\"1\":\"...\"}}")
     return json.loads(re.sub(r"```(?:json)?","",raw).strip().strip("`").strip())
 
-# ── LEFT NAV DOCK ─────────────────────────────────────────────────────────────
-nav_items = [("🏠","Home",True),("📊","Analytics",False),("🕘","History",False),("⚙️","Settings",False)]
+# ── NAV & STEP CONFIG ────────────────────────────────────────────────────────
+NAV_PAGES = [("🏠","home"),("📊","analytics"),("🕘","history"),("⚙️","settings")]
 
 step_order = ["upload","config","quiz","results"]
 step_names = ["Upload","Configure","Quiz","Results"]
 ci = step_order.index(st.session_state.step)
 
-def nav_html():
-    items = ""
-    for icon,label,active in nav_items:
-        cls = "active" if active else ""
-        items += f'<div class="nav-item {cls}" title="{label}">{icon}</div>'
-    steps = ""
+def steps_html():
+    out = ""
     for idx,(_,name) in enumerate(zip(step_order,step_names)):
         dc = "done" if idx<ci else ("active" if idx==ci else "")
         lc = "active" if idx==ci else ""
         lbl = "✓" if idx<ci else str(idx+1)
-        steps += f'<div class="step-node"><div class="step-circle {dc}">{lbl}</div><span class="step-label {lc}">{name}</span></div>'
-        if idx<3: steps += f'<div class="step-line {"done" if idx<ci else ""}"></div>'
-    return items, steps
-
-nav_items_html, steps_html = nav_html()
+        out += f'<div class="step-node"><div class="step-circle {dc}">{lbl}</div><span class="step-label {lc}">{name}</span></div>'
+        if idx<3: out += f'<div class="step-line {"done" if idx<ci else ""}"></div>'
+    return out
 
 nav_col, main_col = st.columns([0.06, 0.94])
 
 with nav_col:
-    st.markdown(f"""
-    <div class="nav-dock">
-      <div class="nav-logo">🎯</div>
-      <div class="nav-sep"></div>
-      {nav_items_html}
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown('<div class="nav-btn-col">', unsafe_allow_html=True)
+    st.markdown('<div style="text-align:center;padding:14px 0 10px"><div class="nav-logo" style="margin:0 auto">🎯</div></div>', unsafe_allow_html=True)
+    st.markdown('<div style="width:32px;height:1px;background:rgba(255,255,255,0.07);margin:4px auto 8px"></div>', unsafe_allow_html=True)
+    for icon, page in NAV_PAGES:
+        is_active = st.session_state.nav_page == page
+        if st.button(icon, key=f"nav_{page}", type="primary" if is_active else "secondary", help=page.capitalize()):
+            st.session_state.nav_page = page
+            if page == "home":
+                pass  # stay on current quiz step
+            st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
 
 with main_col:
+    nav = st.session_state.nav_page
+
     # TOP HEADER
+    page_title = {"home": step_names[ci], "analytics": "Analytics", "history": "History", "settings": "Settings"}[nav]
     st.markdown(f"""
     <div class="top-header">
-      <div class="header-title">AI Quiz Generator <span>/</span> <span style="color:rgba(255,255,255,.6)">{step_names[ci]}</span></div>
-      <div class="step-track">{steps_html}</div>
-      <div class="header-right">
-        <div class="hdr-avatar">👤</div>
-      </div>
+      <div class="header-title">AI Quiz Generator <span>/</span> <span style="color:rgba(255,255,255,.6)">{page_title}</span></div>
+      <div class="step-track">{"" if nav != "home" else steps_html()}</div>
+      <div class="header-right"><div class="hdr-avatar">👤</div></div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -654,9 +752,89 @@ with main_col:
     with center:
 
         # ══════════════════════════════════════════════════════════════════════
-        # SCREEN 1 — UPLOAD
+        # ANALYTICS PAGE
         # ══════════════════════════════════════════════════════════════════════
-        if st.session_state.step == "upload":
+        if nav == "analytics":
+            hist = st.session_state.quiz_history
+            total_quizzes = len(hist)
+            avg_score = round(sum(h["pct"] for h in hist)/total_quizzes) if hist else 0
+            best = max((h["pct"] for h in hist), default=0)
+            total_q = sum(h["total"] for h in hist)
+
+            st.markdown(f"""
+            <div class="screen-head">
+              <span class="eyebrow">Your Performance</span>
+              <h2>Analytics Dashboard</h2>
+              <p>Stats from all your quiz sessions this session.</p>
+            </div>
+            <div class="info-grid">
+              <div class="info-card"><div class="ic-label">Quizzes Taken</div><div class="ic-val">{total_quizzes}</div><div class="ic-sub">this session</div></div>
+              <div class="info-card"><div class="ic-label">Avg Score</div><div class="ic-val">{avg_score}%</div><div class="ic-sub">across all quizzes</div></div>
+              <div class="info-card"><div class="ic-label">Best Score</div><div class="ic-val">{best}%</div><div class="ic-sub">personal best</div></div>
+              <div class="info-card"><div class="ic-label">Total Questions</div><div class="ic-val">{total_q}</div><div class="ic-sub">answered</div></div>
+            </div>
+            """, unsafe_allow_html=True)
+            if not hist:
+                st.markdown('<div style="color:rgba(255,255,255,.3);font-size:13px;text-align:center;padding:20px">Complete a quiz to see analytics here.</div>', unsafe_allow_html=True)
+            if st.button("← Back to Quiz", type="secondary"):
+                st.session_state.nav_page = "home"; st.rerun()
+
+        # ══════════════════════════════════════════════════════════════════════
+        # HISTORY PAGE
+        # ══════════════════════════════════════════════════════════════════════
+        elif nav == "history":
+            hist = st.session_state.quiz_history
+            st.markdown("""
+            <div class="screen-head">
+              <span class="eyebrow">Past Sessions</span>
+              <h2>Quiz History</h2>
+              <p>All quiz attempts from your current session.</p>
+            </div>
+            """, unsafe_allow_html=True)
+            if not hist:
+                st.markdown('<div style="color:rgba(255,255,255,.3);font-size:13px;text-align:center;padding:20px">No quizzes completed yet.</div>', unsafe_allow_html=True)
+            else:
+                for h in reversed(hist):
+                    color = "#34d399" if h["pct"]>=70 else "#fb923c" if h["pct"]>=40 else "#f87171"
+                    st.markdown(f"""
+                    <div class="hist-row">
+                      <div>
+                        <div class="hr-title">📄 {h["file"]}</div>
+                        <div class="hr-sub">{h["difficulty"]} · {h["total"]} questions · {h["time"]}</div>
+                      </div>
+                      <div class="hist-score" style="color:{color}">{h["pct"]}%</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+            if st.button("← Back to Quiz", type="secondary"):
+                st.session_state.nav_page = "home"; st.rerun()
+
+        # ══════════════════════════════════════════════════════════════════════
+        # SETTINGS PAGE
+        # ══════════════════════════════════════════════════════════════════════
+        elif nav == "settings":
+            st.markdown("""
+            <div class="screen-head">
+              <span class="eyebrow">Configuration</span>
+              <h2>Settings</h2>
+              <p>Your current app configuration.</p>
+            </div>
+            """, unsafe_allow_html=True)
+            st.markdown(f"""
+            <div class="setting-row"><div><div class="sr-label">AI Model</div><div class="sr-sub">Language model used for generation</div></div><span class="sr-val">claude-haiku-4-5</span></div>
+            <div class="setting-row"><div><div class="sr-label">Provider</div><div class="sr-sub">API routing service</div></div><span class="sr-val">OpenRouter</span></div>
+            <div class="setting-row"><div><div class="sr-label">Max Questions</div><div class="sr-sub">Maximum per quiz session</div></div><span class="sr-val">30</span></div>
+            <div class="setting-row"><div><div class="sr-label">File Types</div><div class="sr-sub">Supported upload formats</div></div><span class="sr-val">.pptx</span></div>
+            <div class="setting-row"><div><div class="sr-label">Max File Size</div><div class="sr-sub">Upload limit</div></div><span class="sr-val">25 MB</span></div>
+            <div class="setting-row"><div><div class="sr-label">AI Explanations</div><div class="sr-sub">Generated for wrong answers</div></div><span class="sr-val">Enabled</span></div>
+            """, unsafe_allow_html=True)
+            st.write("")
+            if st.button("← Back to Quiz", type="secondary"):
+                st.session_state.nav_page = "home"; st.rerun()
+
+        # ══════════════════════════════════════════════════════════════════════
+        # HOME — QUIZ FLOW
+        # ══════════════════════════════════════════════════════════════════════
+        elif nav == "home" and st.session_state.step == "upload":
             st.markdown("""
             <div class="glass-panel">
               <div class="screen-head">
@@ -729,7 +907,7 @@ with main_col:
         # ══════════════════════════════════════════════════════════════════════
         # SCREEN 2 — CONFIGURE
         # ══════════════════════════════════════════════════════════════════════
-        elif st.session_state.step == "config":
+        elif nav == "home" and st.session_state.step == "config":
             st.markdown("""
             <div class="screen-head">
               <span class="eyebrow">Step 2 of 3</span>
@@ -766,7 +944,7 @@ with main_col:
         # ══════════════════════════════════════════════════════════════════════
         # SCREEN 3 — QUIZ (one question per screen)
         # ══════════════════════════════════════════════════════════════════════
-        elif st.session_state.step == "quiz":
+        elif nav == "home" and st.session_state.step == "quiz":
             qs      = st.session_state.questions
             total   = len(qs)
             i       = st.session_state.current_q
@@ -788,14 +966,8 @@ with main_col:
             """, unsafe_allow_html=True)
 
             for key,val in q["options"].items():
-                picked = "picked" if sel==key else ""
-                st.markdown(f"""
-                <div class="opt-card {picked}">
-                  <span class="opt-badge">{key}</span>
-                  <span>{val}</span>
-                </div>
-                """, unsafe_allow_html=True)
-                if st.button(val, key=f"o_{i}_{key}_{st.session_state.rk}", use_container_width=True, type="primary" if sel==key else "secondary"):
+                picked = sel == key
+                if st.button(f"{key}   {val}", key=f"o_{i}_{key}_{st.session_state.rk}", use_container_width=True, type="primary" if picked else "secondary"):
                     st.session_state.user_answers[qid]=key; st.rerun()
 
             st.write("")
@@ -819,7 +991,7 @@ with main_col:
         # ══════════════════════════════════════════════════════════════════════
         # SCREEN 4 — RESULTS
         # ══════════════════════════════════════════════════════════════════════
-        elif st.session_state.step == "results":
+        elif nav == "home" and st.session_state.step == "results":
             qs      = st.session_state.questions
             total   = len(qs)
             correct = sum(1 for q in qs if st.session_state.user_answers.get(str(q["id"]))==q["correct"])
@@ -827,6 +999,17 @@ with main_col:
             pct     = round((correct/total)*100) if total else 0
             m,s     = divmod(st.session_state.elapsed,60)
             hl      = ("Perfect score! 🎉" if pct==100 else "Excellent! 🌟" if pct>=90 else "Great job! 💪" if pct>=80 else "Good effort 📚" if pct>=60 else "Keep going! 🚀")
+
+            # save to history once
+            hist_key = f"{st.session_state.filename}_{st.session_state.elapsed}_{correct}"
+            if not any(h.get("_key")==hist_key for h in st.session_state.quiz_history):
+                st.session_state.quiz_history.append({
+                    "_key": hist_key,
+                    "file": st.session_state.filename,
+                    "difficulty": st.session_state.difficulty,
+                    "total": total, "correct": correct, "pct": pct,
+                    "time": f"{m:02d}:{s:02d}",
+                })
 
             st.markdown(f"""
             <div class="result-banner">
@@ -861,5 +1044,7 @@ with main_col:
                     st.rerun()
             with c2:
                 if st.button("↑  Upload New PPT", type="secondary"):
+                    keep = {"quiz_history": st.session_state.quiz_history}
                     for k in list(st.session_state.keys()): del st.session_state[k]
+                    st.session_state.quiz_history = keep["quiz_history"]
                     st.rerun()
