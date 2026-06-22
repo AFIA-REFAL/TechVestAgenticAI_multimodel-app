@@ -1,6 +1,6 @@
 # Technical Design — AI Quiz Generator
 
-**Version:** 2.0  
+**Version:** 1.0  
 **Date:** June 2026  
 **Author:** AFIA-REFAL  
 **Project:** TechVest Agentic AI — Academic Year 2025–26
